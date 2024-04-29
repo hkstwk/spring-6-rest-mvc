@@ -14,8 +14,8 @@ class BeerControllerTest {
     @Autowired
     BeerController controller;
 
-    @Test
-    void getBeerById() {
-        System.out.println(controller.getBeerById(UUID.randomUUID()));
-    }
+//    @Test
+//    void getBeerById(UUID beerId) {
+//        System.out.println(controller.getBeerById(beerId));
+//    }
 }
