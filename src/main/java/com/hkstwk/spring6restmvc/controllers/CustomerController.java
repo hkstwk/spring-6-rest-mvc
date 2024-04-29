@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,13 @@ import java.util.UUID;
 @RequestMapping("/api/v1/customer")
 public class CustomerController {
     private final CustomerService customerService;
+
+    @PutMapping("{customerId}")
+    public ResponseEntity<Customer> updateById(@PathVariable("customerId") UUID customerId,  @RequestBody Customer customer) {
+        customerService.updateById(customerId, customer);
+        log.debug("Updated customer with id {}, called in {}", customerId, this.getClass().getSimpleName());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
     @PostMapping
     public ResponseEntity<Customer> handlePost(@RequestBody Customer customer) {
