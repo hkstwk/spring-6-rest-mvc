@@ -21,12 +21,13 @@ public class CustomerController {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Customer> getAllCustomers() {
+        log.debug("Get list of customer, called in {}", this.getClass().getSimpleName());
         return customerService.listCustomers();
     }
 
     @RequestMapping(value = "{customerId}", method = RequestMethod.GET )
     public Customer getCustomerById(@PathVariable("customerId") UUID id) {
-        log.debug("Get customer by id {} in controller", id);
+        log.debug("Get customer by id {}, called in {}", id, this.getClass().getSimpleName());
         return customerService.getCustomerById(id);
     }
 }

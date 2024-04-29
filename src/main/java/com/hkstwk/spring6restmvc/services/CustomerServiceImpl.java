@@ -1,6 +1,7 @@
 package com.hkstwk.spring6restmvc.services;
 
 import com.hkstwk.spring6restmvc.model.Customer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private Map<UUID, Customer> customerMap;
@@ -48,11 +50,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomerById(UUID id) {
+        log.debug("Get customer by id {}, called in {}", id, this.getClass().getSimpleName());
         return customerMap.get(id);
     }
 
     @Override
     public List<Customer> listCustomers() {
+        log.debug("Get list of customer, called in {}", this.getClass().getSimpleName());
         return new ArrayList<>(customerMap.values());
     }
 }

@@ -77,12 +77,13 @@ public class BeerServiceImpl implements BeerService {
 
     @Override
     public Beer getBeerById(UUID id) {
-        log.debug("get beer by id {} called in service", id);
+        log.debug("Get beer by id {}, called in {}", id, this.getClass().getSimpleName());
         return beerMap.get(id);
     }
 
     @Override
     public List<Beer> listBeers() {
+        log.debug("Get list of beer, called in {}", this.getClass().getSimpleName());
         return new ArrayList<>(this.beerMap.values());
     }
 }

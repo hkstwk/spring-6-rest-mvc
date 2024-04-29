@@ -21,12 +21,13 @@ public class BeerController {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Beer> listBeers() {
+        log.debug("Get list of beer, called in {}", this.getClass().getSimpleName());
         return beerService.listBeers();
     }
 
     @RequestMapping(value = "{beerId}", method = RequestMethod.GET)
-    public Beer getBeerById(@PathVariable("beerId") UUID beerId){
-        log.debug("Get beer by beerId {} called in controller", beerId);
+    public Beer getBeerById(@PathVariable("beerId") UUID beerId) {
+        log.debug("Get beer by beerId {}, called in {}", beerId, this.getClass().getSimpleName());
         return beerService.getBeerById(beerId);
     }
 }
