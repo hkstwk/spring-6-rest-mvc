@@ -84,4 +84,10 @@ public class CustomerServiceImpl implements CustomerService {
         customerMap.put(existingCustomer.getId(), existingCustomer);
         log.debug("Updated customer with id {}, called in {}", customerId, this.getClass().getSimpleName());
     }
+
+    @Override
+    public void deleteById(UUID customerId) {
+        customerMap.remove(customerId);
+        log.debug("Deleted customer with id {}, called in {}", customerId, this.getClass().getSimpleName());
+    }
 }
