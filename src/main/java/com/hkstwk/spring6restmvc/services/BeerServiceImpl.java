@@ -120,4 +120,10 @@ public class BeerServiceImpl implements BeerService {
         beerMap.put(existingBeer.getId(), existingBeer);
         log.debug("Updated beer with id {}, called in {}", beerId, this.getClass().getSimpleName());
     }
+
+    @Override
+    public void deleteById(UUID beerId) {
+        beerMap.remove(beerId);
+        log.debug("Deleted beer with id {}, called in {}", beerId, this.getClass().getSimpleName());
+    }
 }

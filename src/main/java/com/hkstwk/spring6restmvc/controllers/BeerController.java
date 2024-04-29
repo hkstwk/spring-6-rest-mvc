@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,13 @@ import java.util.UUID;
 @RequestMapping("/api/v1/beer")
 public class BeerController {
     private final BeerService beerService;
+
+    @DeleteMapping("{beerId}")
+    public ResponseEntity deleteById(@PathVariable UUID beerId) {
+        beerService.deleteById(beerId);
+        log.debug("Deleted beer with id {}, called in {}", beerId, this.getClass().getSimpleName());
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
     @PutMapping("{beerId}")
     public ResponseEntity<Beer> updateById(@PathVariable("beerId") UUID beerId, @RequestBody Beer beer) {
