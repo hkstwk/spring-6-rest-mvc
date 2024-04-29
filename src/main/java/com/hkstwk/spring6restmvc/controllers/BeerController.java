@@ -25,10 +25,11 @@ public class BeerController {
     private final BeerService beerService;
 
     @PostMapping
-    public ResponseEntity<Beer> handlePostt(@RequestBody Beer beer) {
+    public ResponseEntity<Beer> handlePost(@RequestBody Beer beer) {
         Beer savedBeer = beerService.saveNewBeer(beer);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location","/api/v1/beer/" + savedBeer.getId().toString());
+        headers.add("Location","/api/v1/beer/" + savedBeer.getId());
+        log.debug("Post new beer with id {}, called in {}", savedBeer.getId(), this.getClass().getSimpleName());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 

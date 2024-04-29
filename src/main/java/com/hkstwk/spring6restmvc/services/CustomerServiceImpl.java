@@ -59,4 +59,21 @@ public class CustomerServiceImpl implements CustomerService {
         log.debug("Get list of customer, called in {}", this.getClass().getSimpleName());
         return new ArrayList<>(customerMap.values());
     }
+
+    @Override
+    public Customer saveNewCustomer(Customer customer) {
+        Customer savedCustomer = Customer.builder()
+                .id(UUID.randomUUID())
+                .customerName(customer.getCustomerName())
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .version(1)
+                .build();
+
+        customerMap.put(savedCustomer.getId(), savedCustomer);
+
+        log.debug("Save new customer with id {}, called in {}", savedCustomer.getId(), this.getClass().getSimpleName());
+
+        return savedCustomer;
+    }
 }
