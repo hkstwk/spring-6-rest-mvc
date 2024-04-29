@@ -14,7 +14,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    private Map<UUID, Customer> customerMap;
+    private final Map<UUID, Customer> customerMap;
 
     public CustomerServiceImpl() {
         customerMap = new HashMap<>();

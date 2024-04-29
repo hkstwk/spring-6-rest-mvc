@@ -27,10 +27,10 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @DeleteMapping("{customerId}")
-    public ResponseEntity deleteById(@PathVariable UUID customerId) {
+    public ResponseEntity<Customer> deleteById(@PathVariable UUID customerId) {
         customerService.deleteById(customerId);
         log.debug("Deleted customer with id {}, called in {}", customerId, this.getClass().getSimpleName());
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("{customerId}")
