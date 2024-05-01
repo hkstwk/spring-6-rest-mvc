@@ -1,5 +1,7 @@
 package com.hkstwk.spring6restmvc.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hkstwk.spring6restmvc.model.Beer;
 import com.hkstwk.spring6restmvc.services.BeerService;
 import com.hkstwk.spring6restmvc.services.BeerServiceImpl;
@@ -26,7 +28,16 @@ class BeerControllerTest {
     @MockBean
     BeerService beerService;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     BeerServiceImpl beerServiceImpl = new BeerServiceImpl();
+
+    @Test
+    void createBeer() throws Exception {
+        Beer beer = beerServiceImpl.listBeers().getFirst();
+        System.out.println((objectMapper.writeValueAsString(beer)));
+    }
 
     @Test
     void getBeerById() throws Exception {
