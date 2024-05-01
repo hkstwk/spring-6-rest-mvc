@@ -1,6 +1,5 @@
 package com.hkstwk.spring6restmvc.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hkstwk.spring6restmvc.model.Customer;
 import com.hkstwk.spring6restmvc.services.CustomerService;
