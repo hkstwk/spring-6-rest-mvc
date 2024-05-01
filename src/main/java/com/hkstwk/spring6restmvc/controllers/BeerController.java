@@ -49,7 +49,7 @@ public class BeerController {
     }
 
     @PostMapping
-    public ResponseEntity<Beer> handlePost(@RequestBody Beer beer) {
+    public ResponseEntity<Beer> saveNewBeer(@RequestBody Beer beer) {
         Beer savedBeer = beerService.saveNewBeer(beer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location","/api/v1/beer/" + savedBeer.getId());
