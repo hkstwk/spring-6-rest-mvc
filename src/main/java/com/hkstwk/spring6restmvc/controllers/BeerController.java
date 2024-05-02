@@ -1,5 +1,6 @@
 package com.hkstwk.spring6restmvc.controllers;
 
+import com.hkstwk.spring6restmvc.exceptions.NotFoundException;
 import com.hkstwk.spring6restmvc.model.Beer;
 import com.hkstwk.spring6restmvc.services.BeerService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,6 +64,11 @@ public class BeerController {
     public List<Beer> listBeers() {
         log.debug("Get list of beer, called in {}", this.getClass().getSimpleName());
         return beerService.listBeers();
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Beer> handleNotFoundException(){
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(BEER_PATH_ID)
