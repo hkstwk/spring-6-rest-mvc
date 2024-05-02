@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -77,9 +78,9 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Beer getBeerById(UUID id) {
+    public Optional<Beer> getBeerById(UUID id) {
         log.debug("Get beer by id {}, called in {}", id, this.getClass().getSimpleName());
-        return beerMap.get(id);
+        return Optional.ofNullable(beerMap.get(id));
     }
 
     @Override

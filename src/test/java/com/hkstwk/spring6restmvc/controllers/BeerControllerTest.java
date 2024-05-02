@@ -1,7 +1,6 @@
 package com.hkstwk.spring6restmvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hkstwk.spring6restmvc.exceptions.NotFoundException;
 import com.hkstwk.spring6restmvc.model.Beer;
 import com.hkstwk.spring6restmvc.services.BeerService;
 import com.hkstwk.spring6restmvc.services.BeerServiceImpl;
@@ -17,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.hkstwk.spring6restmvc.controllers.BeerController.BEER_PATH;
@@ -123,7 +123,7 @@ class BeerControllerTest {
     void getBeerById() throws Exception {
         Beer testBeer = beerServiceImpl.listBeers().getFirst();
 
-        given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
+        given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 
         mockMvc.perform(get(BEER_PATH_ID, testBeer.getId())
                         .accept(MediaType.APPLICATION_JSON))
@@ -135,7 +135,7 @@ class BeerControllerTest {
 
     @Test
     void getBeerByIdNotFound () throws Exception {
-        given(beerService.getBeerById(any(UUID.class))).willThrow(NotFoundException.class);
+        given(beerService.getBeerById(any(UUID.class))).willReturn(Optional.empty());
 
         mockMvc.perform(get(BEER_PATH_ID, UUID.randomUUID()))
                 .andExpect(status().isNotFound());
