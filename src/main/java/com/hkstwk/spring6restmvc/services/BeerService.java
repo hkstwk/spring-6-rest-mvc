@@ -1,17 +1,17 @@
 package com.hkstwk.spring6restmvc.services;
 
-import com.hkstwk.spring6restmvc.model.Beer;
+import com.hkstwk.spring6restmvc.model.BeerDTO;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface BeerService {
-    Optional<Beer> getBeerById(UUID id);
-    List<Beer> listBeers();
-    Beer saveNewBeer(Beer beer);
-    void updateById(UUID beerId, Beer beer);
+    Optional<BeerDTO> getBeerById(UUID id);
+    List<BeerDTO> listBeers();
+    BeerDTO saveNewBeer(BeerDTO beer);
+    void updateById(UUID beerId, BeerDTO beer);
     void deleteById(UUID beerId);
-    void patchById(UUID beerId, Beer beer);
+    void patchById(UUID beerId, BeerDTO beer);
 }
 

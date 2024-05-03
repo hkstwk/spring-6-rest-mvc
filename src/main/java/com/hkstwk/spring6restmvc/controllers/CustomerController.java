@@ -1,7 +1,7 @@
 package com.hkstwk.spring6restmvc.controllers;
 
 import com.hkstwk.spring6restmvc.exceptions.NotFoundException;
-import com.hkstwk.spring6restmvc.model.Customer;
+import com.hkstwk.spring6restmvc.model.CustomerDTO;
 import com.hkstwk.spring6restmvc.services.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,29 +30,29 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PatchMapping(CUSTOMER_PATH_ID)
-    public ResponseEntity<Customer> patchCustomerById(@PathVariable UUID customerId, @RequestBody Customer customer) {
+    public ResponseEntity<CustomerDTO> patchCustomerById(@PathVariable UUID customerId, @RequestBody CustomerDTO customer) {
         customerService.patchCustomerById(customerId, customer);
         log.debug("Patched customer with id {}, called in {}", customerId, this.getClass().getSimpleName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(CUSTOMER_PATH_ID)
-    public ResponseEntity<Customer> deleteById(@PathVariable UUID customerId) {
+    public ResponseEntity<CustomerDTO> deleteById(@PathVariable UUID customerId) {
         customerService.deleteById(customerId);
         log.debug("Deleted customer with id {}, called in {}", customerId, this.getClass().getSimpleName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(CUSTOMER_PATH_ID)
-    public ResponseEntity<Customer> updateById(@PathVariable("customerId") UUID customerId,  @RequestBody Customer customer) {
+    public ResponseEntity<CustomerDTO> updateById(@PathVariable("customerId") UUID customerId, @RequestBody CustomerDTO customer) {
         customerService.updateById(customerId, customer);
         log.debug("Updated customer with id {}, called in {}", customerId, this.getClass().getSimpleName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(CUSTOMER_PATH)
-    public ResponseEntity<Customer> handlePost(@RequestBody Customer customer) {
-        Customer savedCustomer = customerService.saveNewCustomer(customer);
+    public ResponseEntity<CustomerDTO> handlePost(@RequestBody CustomerDTO customer) {
+        CustomerDTO savedCustomer = customerService.saveNewCustomer(customer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", CUSTOMER_PATH.concat("/").concat(savedCustomer.getId().toString()));
         log.debug("Save new customer with id {}, called in {}", savedCustomer.getId(), this.getClass().getSimpleName());
@@ -60,13 +60,13 @@ public class CustomerController {
     }
 
     @GetMapping(CUSTOMER_PATH)
-    public List<Customer> getAllCustomers() {
+    public List<CustomerDTO> getAllCustomers() {
         log.debug("Get list of customer, called in {}", this.getClass().getSimpleName());
         return customerService.listCustomers();
     }
 
     @GetMapping(CUSTOMER_PATH_ID)
-    public Customer getCustomerById(@PathVariable("customerId") UUID id) {
+    public CustomerDTO getCustomerById(@PathVariable("customerId") UUID id) {
         log.debug("Get customer by id {}, called in {}", id, this.getClass().getSimpleName());
         return customerService.getCustomerById(id).orElseThrow(NotFoundException::new);
     }
