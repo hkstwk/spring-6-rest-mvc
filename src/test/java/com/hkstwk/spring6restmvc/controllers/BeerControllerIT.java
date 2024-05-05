@@ -48,6 +48,7 @@ class BeerControllerIT {
 
     @Test
     void testGetBeerIdNotFound() {
-        assertThrows(NotFoundException.class, () -> beerController.getBeerById(UUID.randomUUID()));
+        UUID uuid = UUID.randomUUID();
+        assertThrows(NotFoundException.class, () -> beerController.getBeerById(uuid));
     }
 }

@@ -60,7 +60,7 @@ public class CustomerController {
     }
 
     @GetMapping(CUSTOMER_PATH)
-    public List<CustomerDTO> getAllCustomers() {
+    public List<CustomerDTO> listCustomers() {
         log.debug("Get list of customer, called in {}", this.getClass().getSimpleName());
         return customerService.listCustomers();
     }

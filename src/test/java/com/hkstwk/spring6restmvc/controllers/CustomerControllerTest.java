@@ -125,7 +125,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void getAllCustomers() throws Exception {
+    void listCustomers() throws Exception {
         given(customerService.listCustomers()).willReturn(customerServiceImpl.listCustomers());
 
         mockMvc.perform(get(CUSTOMER_PATH)
