@@ -2,6 +2,7 @@ package com.hkstwk.spring6restmvc.controllers;
 
 import com.hkstwk.spring6restmvc.entities.Beer;
 import com.hkstwk.spring6restmvc.exceptions.NotFoundException;
+import com.hkstwk.spring6restmvc.mappers.BeerMapper;
 import com.hkstwk.spring6restmvc.model.BeerDTO;
 import com.hkstwk.spring6restmvc.repositories.BeerRepository;
 import jakarta.transaction.Transactional;
@@ -27,8 +28,9 @@ class BeerControllerIT {
 
     @Autowired
     BeerRepository beerRepository;
+
     @Autowired
-    private DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration;
+    BeerMapper beerMapper;
 
     @Test
     void testListBeers() {
@@ -75,5 +77,23 @@ class BeerControllerIT {
         UUID savedUUID = UUID.fromString(locationUUID[locationUUID.length - 1]);
         Beer beer = beerRepository.findById(savedUUID).get();
         assertThat(beer).isNotNull();
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testUpdateBeerById() {
+        Beer beer = beerRepository.findAll().get(0);
+        BeerDTO beerDTO = beerMapper.beerToBeerDTO(beer);
+        beerDTO.setId(null);
+        beerDTO.setVersion(null);
+        final String beerName = "My updated integration test beer name";
+        beerDTO.setBeerName(beerName);
+
+        ResponseEntity responseEntity = beerController.updateById(beer.getId(), beerDTO);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        Beer updatedBeer = beerRepository.findById(beer.getId()).get();
+        assertThat(updatedBeer.getBeerName()).isEqualTo(beerName);
     }
 }
