@@ -58,6 +58,8 @@ class BeerControllerIT {
         assertThrows(NotFoundException.class, () -> beerController.getBeerById(uuid));
     }
 
+    @Rollback
+    @Transactional
     @Test
     void testSaveNewBeer() {
         BeerDTO beerDTO = BeerDTO.builder()
