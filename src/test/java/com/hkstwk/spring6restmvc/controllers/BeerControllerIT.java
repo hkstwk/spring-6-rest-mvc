@@ -77,8 +77,6 @@ class BeerControllerIT {
         assertThat(beer).isNotNull();
     }
 
-    @Rollback
-    @Transactional
     @Test
     void updateBeerNotFound() {
         assertThrows(NotFoundException.class, () -> {
@@ -114,5 +112,11 @@ class BeerControllerIT {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(beerRepository.findById(beer.getId())).isEmpty();
+    }
+
+    @Test
+    void testDeleteByIdNotFound() {
+        UUID uuid = UUID.randomUUID();
+        assertThrows(NotFoundException.class, () -> beerController.deleteById(uuid));
     }
 }

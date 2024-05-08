@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import static com.hkstwk.spring6restmvc.controllers.BeerController.BEER_PATH;
 import static com.hkstwk.spring6restmvc.controllers.BeerController.BEER_PATH_ID;
+import static org.assertj.core.api.Assertions.anyOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -87,6 +88,8 @@ class BeerControllerTest {
     @Test
     void deleteBeer() throws Exception {
         BeerDTO beer = beerServiceImpl.listBeers().getFirst();
+
+        given(beerService.deleteById(any())).willReturn(true);
 
         mockMvc.perform(delete(BEER_PATH_ID, beer.getId()))
                 .andExpect(status().isNoContent());
