@@ -1,6 +1,7 @@
 package com.hkstwk.spring6restmvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hkstwk.spring6restmvc.exceptions.NotFoundException;
 import com.hkstwk.spring6restmvc.model.BeerDTO;
 import com.hkstwk.spring6restmvc.services.BeerService;
 import com.hkstwk.spring6restmvc.services.BeerServiceImpl;
@@ -23,6 +24,7 @@ import static com.hkstwk.spring6restmvc.controllers.BeerController.BEER_PATH;
 import static com.hkstwk.spring6restmvc.controllers.BeerController.BEER_PATH_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -55,6 +57,9 @@ class BeerControllerTest {
 
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
+
+    @Autowired
+    private BeerController beerController;
 
     @BeforeEach
     void setUp() {
@@ -91,8 +96,17 @@ class BeerControllerTest {
     }
 
     @Test
+    void updateBeerNotFound() {
+        assertThrows(NotFoundException.class, () -> {
+            beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build());
+        });
+    }
+
+    @Test
     void updateBeer() throws Exception {
         BeerDTO beer = beerServiceImpl.listBeers().getFirst();
+
+        given(beerService.updateById(any(), any())).willReturn(Optional.of(beer));
 
         mockMvc.perform(put(BEER_PATH_ID, beer.getId())
                 .accept(MediaType.APPLICATION_JSON)

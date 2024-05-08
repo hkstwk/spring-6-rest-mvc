@@ -8,13 +8,11 @@ import com.hkstwk.spring6restmvc.repositories.BeerRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -77,6 +75,15 @@ class BeerControllerIT {
         UUID savedUUID = UUID.fromString(locationUUID[locationUUID.length - 1]);
         Beer beer = beerRepository.findById(savedUUID).get();
         assertThat(beer).isNotNull();
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void updateBeerNotFound() {
+        assertThrows(NotFoundException.class, () -> {
+            beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build());
+        });
     }
 
     @Rollback
