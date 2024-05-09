@@ -3,6 +3,7 @@ package com.hkstwk.spring6restmvc.model;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public class BeerDTO {
 
     @NotBlank
     @NotNull
+    @Size(min = 1, max = 50)
     private String beerName;
 
     @NotNull

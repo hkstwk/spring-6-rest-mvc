@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -66,30 +67,36 @@ public class BeerServiceJpaImpl implements BeerService {
         }
         return false;
     }
+
     @Override
     public Optional<BeerDTO> patchById(UUID beerId, BeerDTO beer) {
         AtomicReference<Optional<BeerDTO>> atomicReference = new AtomicReference<>();
 
         beerRepository.findById(beerId).ifPresentOrElse(foundBeer -> {
-            if (beer.getPrice() != null) {
-                foundBeer.setPrice(beer.getPrice());
-            }
+                    if (beer.getPrice() != null) {
+                        foundBeer.setPrice(beer.getPrice());
+                    }
 
-            if (beer.getQuantityOnHand() != null) {
-                foundBeer.setQuantityOnHand(beer.getQuantityOnHand());
-            }
+                    if (beer.getQuantityOnHand() != null) {
+                        foundBeer.setQuantityOnHand(beer.getQuantityOnHand());
+                    }
 
-            if (beer.getUpc() != null){
-                foundBeer.setUpc(beer.getUpc());
-            }
+                    if (beer.getUpc() != null) {
+                        foundBeer.setUpc(beer.getUpc());
+                    }
 
-            if (beer.getBeerStyle() != null) {
-                foundBeer.setBeerStyle(beer.getBeerStyle());
-            }
-            log.debug("Patched beer with id {}, called in {}", beerId, this.getClass().getSimpleName());
-            atomicReference.set(Optional.of(beerMapper.beerToBeerDTO(beerRepository.save(foundBeer))));
-        },
-  () -> atomicReference.set(Optional.empty()));
+                    if (beer.getBeerStyle() != null) {
+                        foundBeer.setBeerStyle(beer.getBeerStyle());
+                    }
+
+                    if (StringUtils.hasText(beer.getBeerName())) {
+                        foundBeer.setBeerName(beer.getBeerName());
+                    }
+
+                    log.debug("Patched beer with id {}, called in {}", beerId, this.getClass().getSimpleName());
+                    atomicReference.set(Optional.of(beerMapper.beerToBeerDTO(beerRepository.save(foundBeer))));
+                },
+                () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
