@@ -66,7 +66,6 @@ public class BeerServiceJpaImpl implements BeerService {
         }
         return false;
     }
-
     @Override
     public Optional<BeerDTO> patchById(UUID beerId, BeerDTO beer) {
         AtomicReference<Optional<BeerDTO>> atomicReference = new AtomicReference<>();
@@ -89,7 +88,8 @@ public class BeerServiceJpaImpl implements BeerService {
             }
             log.debug("Patched beer with id {}, called in {}", beerId, this.getClass().getSimpleName());
             atomicReference.set(Optional.of(beerMapper.beerToBeerDTO(beerRepository.save(foundBeer))));
-        }, () -> atomicReference.set(Optional.empty()));
+        },
+  () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
     }
