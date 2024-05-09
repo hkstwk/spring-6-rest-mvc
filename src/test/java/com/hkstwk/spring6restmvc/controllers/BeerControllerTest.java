@@ -1,6 +1,5 @@
 package com.hkstwk.spring6restmvc.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hkstwk.spring6restmvc.exceptions.NotFoundException;
 import com.hkstwk.spring6restmvc.model.BeerDTO;
@@ -15,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.HashMap;
@@ -125,6 +123,21 @@ class BeerControllerTest {
     }
 
     @Test
+    void updateBeerEmptyName() throws Exception {
+        BeerDTO beer = beerServiceImpl.listBeers().getFirst();
+        beer.setBeerName("");
+
+        given(beerService.updateById(any(), any())).willReturn(Optional.of(beer));
+
+        mockMvc.perform(put(BEER_PATH_ID, beer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)));
+    }
+
+    @Test
     void createBeer() throws Exception {
         BeerDTO beer = beerServiceImpl.listBeers().getFirst();
         beer.setVersion(null);
@@ -183,7 +196,8 @@ class BeerControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerDTO)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(6)));
 
         System.out.println(resultActions.andReturn().getResponse().getContentAsString());
     }
