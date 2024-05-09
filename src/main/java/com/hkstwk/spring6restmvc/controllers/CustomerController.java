@@ -31,27 +31,33 @@ public class CustomerController {
 
     @PatchMapping(CUSTOMER_PATH_ID)
     public ResponseEntity<CustomerDTO> patchCustomerById(@PathVariable UUID customerId, @RequestBody CustomerDTO customer) {
-        customerService.patchCustomerById(customerId, customer);
+        if (customerService.patchCustomerById(customerId, customer).isEmpty()){
+            throw new NotFoundException("Customer with id " + customerId + " not found");
+        }
         log.debug("Patched customer with id {}, called in {}", customerId, this.getClass().getSimpleName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(CUSTOMER_PATH_ID)
     public ResponseEntity<CustomerDTO> deleteById(@PathVariable UUID customerId) {
-        customerService.deleteById(customerId);
+        if (Boolean.FALSE.equals(customerService.deleteById(customerId))) {
+            throw new NotFoundException("Customer with id " + customerId + " not found");
+        }
         log.debug("Deleted customer with id {}, called in {}", customerId, this.getClass().getSimpleName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(CUSTOMER_PATH_ID)
     public ResponseEntity<CustomerDTO> updateById(@PathVariable("customerId") UUID customerId, @RequestBody CustomerDTO customer) {
-        customerService.updateById(customerId, customer);
+        if (customerService.updateById(customerId, customer).isEmpty()){
+            throw new NotFoundException("Customer with id " + customerId + " not found");
+        }
         log.debug("Updated customer with id {}, called in {}", customerId, this.getClass().getSimpleName());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(CUSTOMER_PATH)
-    public ResponseEntity<CustomerDTO> handlePost(@RequestBody CustomerDTO customer) {
+    public ResponseEntity<CustomerDTO> saveNewCustomer(@RequestBody CustomerDTO customer) {
         CustomerDTO savedCustomer = customerService.saveNewCustomer(customer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", CUSTOMER_PATH.concat("/").concat(savedCustomer.getId().toString()));

@@ -66,39 +66,40 @@ class BeerControllerIT {
                 .beerName("My integration test beer")
                 .build();
 
-        ResponseEntity responseEntity = beerController.saveNewBeer(beerDTO);
+        ResponseEntity<BeerDTO> responseEntity = beerController.saveNewBeer(beerDTO);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
 
         String[] locationUUID = responseEntity.getHeaders().getLocation().getPath().split("/");
         UUID savedUUID = UUID.fromString(locationUUID[locationUUID.length - 1]);
-        Beer beer = beerRepository.findById(savedUUID).get();
+        Beer beer = beerRepository.findById(savedUUID).orElseThrow();
         assertThat(beer).isNotNull();
     }
 
     @Test
     void updateBeerNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build());
-        });
+        UUID uuid = UUID.randomUUID();
+        BeerDTO beerDTO = BeerDTO.builder().build();
+        assertThrows(NotFoundException.class, () ->
+                beerController.updateById(uuid, beerDTO));
     }
 
     @Rollback
     @Transactional
     @Test
     void testUpdateBeerById() {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
         BeerDTO beerDTO = beerMapper.beerToBeerDTO(beer);
         beerDTO.setId(null);
         beerDTO.setVersion(null);
         final String beerName = "My updated integration test beer name";
         beerDTO.setBeerName(beerName);
 
-        ResponseEntity responseEntity = beerController.updateById(beer.getId(), beerDTO);
+        ResponseEntity<BeerDTO> responseEntity = beerController.updateById(beer.getId(), beerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
-        Beer updatedBeer = beerRepository.findById(beer.getId()).get();
+        Beer updatedBeer = beerRepository.findById(beer.getId()).orElseThrow();
         assertThat(updatedBeer.getBeerName()).isEqualTo(beerName);
     }
 
@@ -108,7 +109,7 @@ class BeerControllerIT {
     void testDeleteByIdFound() {
         Beer beer = beerRepository.findAll().getFirst();
 
-        ResponseEntity responseEntity = beerController.deleteById(beer.getId());
+        ResponseEntity<BeerDTO> responseEntity = beerController.deleteById(beer.getId());
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         assertThat(beerRepository.findById(beer.getId())).isEmpty();

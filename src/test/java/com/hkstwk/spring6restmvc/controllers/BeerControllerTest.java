@@ -22,7 +22,6 @@ import java.util.UUID;
 
 import static com.hkstwk.spring6restmvc.controllers.BeerController.BEER_PATH;
 import static com.hkstwk.spring6restmvc.controllers.BeerController.BEER_PATH_ID;
-import static org.assertj.core.api.Assertions.anyOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -73,6 +72,8 @@ class BeerControllerTest {
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "My new beer name");
+
+        given(beerService.patchById(any(), any())).willReturn(Optional.of(beer));
 
         mockMvc.perform(patch(BEER_PATH_ID, beer.getId())
                         .contentType(MediaType.APPLICATION_JSON)

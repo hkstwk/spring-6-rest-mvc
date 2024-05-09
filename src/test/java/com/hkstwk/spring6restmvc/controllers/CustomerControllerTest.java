@@ -26,7 +26,6 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -57,6 +56,8 @@ class CustomerControllerTest {
 
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
+    @Autowired
+    private CustomerController customerController;
 
     @BeforeEach
     void setUp() {
@@ -69,6 +70,8 @@ class CustomerControllerTest {
 
         Map<String, Object> customerMap = new HashMap<>();
         customerMap.put("customerName", "My brand new customer name");
+
+        given(customerService.patchCustomerById(any(), any())).willReturn(Optional.of(customer));
 
         mockMvc.perform(patch(CUSTOMER_PATH_ID, customer.getId())
                 .accept(MediaType.APPLICATION_JSON)
@@ -84,6 +87,8 @@ class CustomerControllerTest {
     @Test
     void deleteCustomer() throws Exception {
         CustomerDTO customer= customerServiceImpl.listCustomers().getFirst();
+
+        given(customerService.deleteById(any())).willReturn(true);
 
         mockMvc.perform(delete(CUSTOMER_PATH_ID, customer.getId()))
                 .andExpect(status().isNoContent());
@@ -112,6 +117,8 @@ class CustomerControllerTest {
     void updateCustomer() throws Exception {
         CustomerDTO customer = customerServiceImpl.listCustomers().getFirst();
         UUID uuid = UUID.randomUUID();
+
+        given(customerService.updateById(any(),any())).willReturn(Optional.of(customer));
 
         mockMvc.perform(put(CUSTOMER_PATH_ID, customer.getId())
                 .accept(MediaType.APPLICATION_JSON)
