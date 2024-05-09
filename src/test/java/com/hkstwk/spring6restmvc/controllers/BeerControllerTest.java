@@ -1,5 +1,6 @@
 package com.hkstwk.spring6restmvc.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hkstwk.spring6restmvc.exceptions.NotFoundException;
 import com.hkstwk.spring6restmvc.model.BeerDTO;
@@ -170,5 +171,16 @@ class BeerControllerTest {
                 .andExpect(jsonPath("$.length()", is(4)));
     }
 
+    @Test
+    void testCreateBeerNullName() throws Exception {
+        BeerDTO beerDTO = BeerDTO.builder().build();
 
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().getFirst());
+
+        mockMvc.perform(post(BEER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(beerDTO)))
+                .andExpect(status().isBadRequest());
+    }
 }
