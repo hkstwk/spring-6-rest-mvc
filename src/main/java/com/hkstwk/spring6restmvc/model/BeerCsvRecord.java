@@ -1,5 +1,6 @@
 package com.hkstwk.spring6restmvc.model;
 
+import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,19 +9,48 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BeerCsvRecord {
+    @CsvBindByName
     private Integer row;
+
+    @CsvBindByName(column = "count.x")
     private Integer count_x;
-    private Float abv;
+
+    @CsvBindByName
+    private String abv;
+
+    @CsvBindByName
     private String ibu;
+
+    @CsvBindByName
     private Integer id;
+
+    @CsvBindByName
     private String beer;
+
+    @CsvBindByName
     private String style;
-    private Integer brewery_id;
+
+    @CsvBindByName(column = "brewery_id")
+    private Integer breweryId;
+
+    @CsvBindByName
     private Float ounces;
+
+    @CsvBindByName
     private String style2;
+
+    @CsvBindByName(column = "count.y")
     private Integer count_y;
+
+    @CsvBindByName
     private String brewery;
+
+    @CsvBindByName
     private String city;
+
+    @CsvBindByName
     private String state;
+
+    @CsvBindByName
     private String label;
 }
