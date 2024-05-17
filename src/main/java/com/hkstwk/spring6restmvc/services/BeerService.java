@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface BeerService {
     Optional<BeerDTO> getBeerById(UUID id);
-    List<BeerDTO> listBeers(String beerName);
+    List<BeerDTO> listBeers(String beerName, String beerStyle);
     BeerDTO saveNewBeer(BeerDTO beer);
     Optional<BeerDTO> updateById(UUID beerId, BeerDTO beer);
     Boolean deleteById(UUID beerId);

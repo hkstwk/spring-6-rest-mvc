@@ -60,4 +60,22 @@ class BeerRepositoryTest {
 
         assertThat(beerList).hasSize(336);
     }
+
+    @Test
+    void listGetBeerListByStyle() {
+        BeerStyle beerStyle = BeerStyle.TRIPLE;
+        List<Beer> beerList = beerRepository.findAllByBeerStyle(beerStyle);
+
+        assertThat(beerList).hasSize(1);
+    }
+
+    @Test
+    void listGetBeerListByNameAndStyle() {
+        BeerStyle beerStyle = BeerStyle.LAGER;
+        String beerName = "%lager%";
+
+        List<Beer> beerList = beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle(beerName, beerStyle);
+
+        assertThat(beerList).hasSize(18);
+    }
 }

@@ -3,6 +3,7 @@ package com.hkstwk.spring6restmvc.services;
 import com.hkstwk.spring6restmvc.entities.Beer;
 import com.hkstwk.spring6restmvc.mappers.BeerMapper;
 import com.hkstwk.spring6restmvc.model.BeerDTO;
+import com.hkstwk.spring6restmvc.model.BeerStyle;
 import com.hkstwk.spring6restmvc.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,21 +34,32 @@ public class BeerServiceJpaImpl implements BeerService {
     }
 
     @Override
-    public List<BeerDTO> listBeers(String beerName) {
+    public List<BeerDTO> listBeers(String beerName, String beerStyle) {
 
         List<Beer> beerList;
 
-        if (StringUtils.hasText(beerName)) {
-            // to do
+        if (StringUtils.hasText(beerName) && beerStyle == null) {
             beerList = listBeerByName(beerName);
+        } else if (StringUtils.hasText(beerStyle) && beerName == null) {
+            beerList = listBeerByStyle(beerStyle);
+        } else if (StringUtils.hasText(beerName) && StringUtils.hasText(beerStyle)) {
+            beerList = listBeersByNameAndStyle(beerName, beerStyle);
         } else {
             beerList = beerRepository.findAll();
         }
 
         return
                 beerList.stream()
-                .map(beerMapper::beerToBeerDTO)
-                .toList();
+                        .map(beerMapper::beerToBeerDTO)
+                        .toList();
+    }
+
+    private List<Beer> listBeersByNameAndStyle(String beerName, String beerStyle) {
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle(beerName, BeerStyle.valueOf(beerStyle));
+    }
+
+    private List<Beer> listBeerByStyle(String beerStyle) {
+        return beerRepository.findAllByBeerStyle(BeerStyle.valueOf(beerStyle));
     }
 
     List<Beer> listBeerByName(String beerName) {
