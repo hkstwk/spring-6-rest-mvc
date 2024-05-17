@@ -5,6 +5,7 @@ import com.hkstwk.spring6restmvc.entities.Beer;
 import com.hkstwk.spring6restmvc.exceptions.NotFoundException;
 import com.hkstwk.spring6restmvc.mappers.BeerMapper;
 import com.hkstwk.spring6restmvc.model.BeerDTO;
+import com.hkstwk.spring6restmvc.model.BeerStyle;
 import com.hkstwk.spring6restmvc.repositories.BeerRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -77,7 +78,7 @@ class BeerControllerIT {
     @Test
     void testListBeersByStyle() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
-                        .queryParam("beerStyle", "TRIPLE"))
+                        .queryParam("beerStyle", BeerStyle.TRIPLE.name()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(1)));
     }
@@ -86,7 +87,7 @@ class BeerControllerIT {
     void testListBeersByNameAndStyle() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .queryParam("beerName", "%lager%")
-                        .queryParam("beerStyle", "LAGER"))
+                        .queryParam("beerStyle", BeerStyle.LAGER.name()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(18)));
     }

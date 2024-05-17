@@ -84,7 +84,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public List<BeerDTO> listBeers(String beerName, String beerStyle) {
+    public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle) {
         log.debug("Get list of beer, called in {}", this.getClass().getSimpleName());
         return new ArrayList<>(this.beerMap.values());
     }

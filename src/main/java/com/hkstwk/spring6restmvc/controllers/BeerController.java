@@ -2,6 +2,7 @@ package com.hkstwk.spring6restmvc.controllers;
 
 import com.hkstwk.spring6restmvc.exceptions.NotFoundException;
 import com.hkstwk.spring6restmvc.model.BeerDTO;
+import com.hkstwk.spring6restmvc.model.BeerStyle;
 import com.hkstwk.spring6restmvc.services.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +70,7 @@ public class BeerController {
     }
 
     @GetMapping(BEER_PATH)
-    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName, @RequestParam(required = false) String beerStyle) {
+    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName, @RequestParam(required = false) BeerStyle beerStyle) {
         log.debug("Get list of beer, called in {}", this.getClass().getSimpleName());
         return beerService.listBeers(beerName, beerStyle);
     }

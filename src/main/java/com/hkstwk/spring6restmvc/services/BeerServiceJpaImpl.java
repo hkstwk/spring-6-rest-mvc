@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,15 +33,15 @@ public class BeerServiceJpaImpl implements BeerService {
     }
 
     @Override
-    public List<BeerDTO> listBeers(String beerName, String beerStyle) {
+    public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle) {
 
         List<Beer> beerList;
 
         if (StringUtils.hasText(beerName) && beerStyle == null) {
             beerList = listBeerByName(beerName);
-        } else if (StringUtils.hasText(beerStyle) && beerName == null) {
+        } else if (beerStyle != null && beerName == null) {
             beerList = listBeerByStyle(beerStyle);
-        } else if (StringUtils.hasText(beerName) && StringUtils.hasText(beerStyle)) {
+        } else if (StringUtils.hasText(beerName) && beerStyle != null) {
             beerList = listBeersByNameAndStyle(beerName, beerStyle);
         } else {
             beerList = beerRepository.findAll();
@@ -54,12 +53,12 @@ public class BeerServiceJpaImpl implements BeerService {
                         .toList();
     }
 
-    private List<Beer> listBeersByNameAndStyle(String beerName, String beerStyle) {
-        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle(beerName, BeerStyle.valueOf(beerStyle));
+    private List<Beer> listBeersByNameAndStyle(String beerName, BeerStyle beerStyle) {
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle(beerName, beerStyle);
     }
 
-    private List<Beer> listBeerByStyle(String beerStyle) {
-        return beerRepository.findAllByBeerStyle(BeerStyle.valueOf(beerStyle));
+    private List<Beer> listBeerByStyle(BeerStyle beerStyle) {
+        return beerRepository.findAllByBeerStyle(beerStyle);
     }
 
     List<Beer> listBeerByName(String beerName) {
