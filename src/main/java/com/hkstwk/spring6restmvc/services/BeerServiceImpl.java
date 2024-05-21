@@ -3,6 +3,8 @@ package com.hkstwk.spring6restmvc.services;
 import com.hkstwk.spring6restmvc.model.BeerDTO;
 import com.hkstwk.spring6restmvc.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -10,7 +12,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -84,9 +85,9 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Integer pageNumber, Integer pageSize) {
+    public Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Integer pageNumber, Integer pageSize) {
         log.debug("Get list of beer, called in {}", this.getClass().getSimpleName());
-        return new ArrayList<>(this.beerMap.values());
+        return new PageImpl<>(new ArrayList<>(this.beerMap.values()));
     }
 
     @Override
