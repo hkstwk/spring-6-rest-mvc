@@ -70,9 +70,9 @@ public class BeerController {
     }
 
     @GetMapping(BEER_PATH)
-    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName, @RequestParam(required = false) BeerStyle beerStyle) {
+    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName, @RequestParam(required = false) BeerStyle beerStyle, Integer pageNumber, Integer pageSize) {
         log.debug("Get list of beer, called in {}", this.getClass().getSimpleName());
-        return beerService.listBeers(beerName, beerStyle);
+        return beerService.listBeers(beerName, beerStyle, pageNumber, pageSize);
     }
 
     @GetMapping(BEER_PATH_ID)
