@@ -8,6 +8,7 @@ import com.hkstwk.spring6restmvc.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,6 +25,9 @@ public class BeerServiceJpaImpl implements BeerService {
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper;
 
+    private static final int DEFAULT_PAGE = 0;
+    private static final int DEFAULT_PAGE_SIZE = 25;
+
     @Override
     public Optional<BeerDTO> getBeerById(UUID id) {
         return Optional.ofNullable(beerMapper.beerToBeerDTO(beerRepository
@@ -34,6 +38,8 @@ public class BeerServiceJpaImpl implements BeerService {
 
     @Override
     public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Integer pageNumber, Integer pageSize) {
+
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
 
         List<Beer> beerList;
 
@@ -51,6 +57,29 @@ public class BeerServiceJpaImpl implements BeerService {
                 beerList.stream()
                         .map(beerMapper::beerToBeerDTO)
                         .toList();
+    }
+
+    public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
+        int queryPageNumber;
+        int queryPageSize;
+
+        if (pageNumber != null && pageNumber > 0) {
+            queryPageNumber = pageNumber -1;
+        } else {
+            queryPageNumber = DEFAULT_PAGE;
+        }
+
+        if (pageSize != null && pageSize > 0) {
+            queryPageSize = pageSize;
+        } else {
+            if (pageSize > 1000) {
+                queryPageSize = 1000;
+            } else {
+                queryPageSize = DEFAULT_PAGE_SIZE;
+            }
+        }
+
+        return PageRequest.of(queryPageNumber, queryPageSize);
     }
 
     private List<Beer> listBeersByNameAndStyle(String beerName, BeerStyle beerStyle) {
