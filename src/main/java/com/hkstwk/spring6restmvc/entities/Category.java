@@ -51,6 +51,7 @@ public class Category {
 
     private String description;
 
+    @Builder.Default
     @ManyToMany
     @JoinTable(name = "beer_category", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "beer_id"))
     private Set<Beer> beers = new HashSet<>();
