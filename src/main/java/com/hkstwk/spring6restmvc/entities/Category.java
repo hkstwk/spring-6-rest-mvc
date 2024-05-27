@@ -1,6 +1,5 @@
 package com.hkstwk.spring6restmvc.entities;
 
-import com.hkstwk.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,12 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Version;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,8 +19,8 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -36,7 +30,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Beer {
+public class Category {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -48,36 +42,16 @@ public class Beer {
     @Version
     private Integer version;
 
-    @NotNull
-    @NotBlank
-    @Size(min = 1, max = 50)
-    @Column(length = 50)
-    private String beerName;
-
-    @NotNull
-    private BeerStyle beerStyle;
-
-    @NotNull
-    @NotBlank
-    private String upc;
-
-    private Integer quantityOnHand;
-
-    @NotNull
-    @Digits(integer = 5, fraction = 2)
-    private BigDecimal price;
-
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    private LocalDateTime updateDate;
+    private LocalDateTime lastModifiedDate;
 
-    @OneToMany(mappedBy = "beer")
-    private Set<BeerOrderLine> beerOrderLines;
+    private String description;
 
     @ManyToMany
-    @JoinTable(name = "beer_category", joinColumns = {@JoinColumn(name = "beer_id")}, inverseJoinColumns = {@JoinColumn(name = "category_id")})
-    private Set<Category> categories;
+    @JoinTable(name = "beer_category", joinColumns = @JoinColumn(name = "category_id"), inverseJoinColumns = @JoinColumn(name = "beer_id"))
+    private Set<Beer> beers = new HashSet<>();
 }
