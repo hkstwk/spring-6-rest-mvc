@@ -1,13 +1,13 @@
 package com.hkstwk.spring6restmvc.entities;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -27,18 +26,8 @@ import java.util.UUID;
 @Builder
 @Entity
 @NoArgsConstructor
-public class BeerOrder {
-
-    public BeerOrder(UUID id, Integer version, String customerRef, LocalDateTime createdDate, LocalDateTime lastModifiedDate, Customer customer, Set<BeerOrderLine> beerOrderLines, BeerOrderShipment beerOrderShipment) {
-        this.id = id;
-        this.version = version;
-        this.customerRef = customerRef;
-        this.createdDate = createdDate;
-        this.lastModifiedDate = lastModifiedDate;
-        this.setCustomer(customer);;
-        this.beerOrderLines = beerOrderLines;
-        this.beerOrderShipment = beerOrderShipment;
-    }
+@AllArgsConstructor
+public class BeerOrderShipment {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -50,7 +39,7 @@ public class BeerOrder {
     @Version
     private Integer version;
 
-    private String customerRef;
+    private String trackingNumber;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -59,18 +48,11 @@ public class BeerOrder {
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
 
-    @ManyToOne
-    private Customer customer;
-
-    @OneToMany(mappedBy = "beerOrder")
-    private Set<BeerOrderLine> beerOrderLines;
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
     @OneToOne
-    private BeerOrderShipment beerOrderShipment;
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-        customer.getBeerOrders().add(this);
-
-    }
+    private BeerOrder beerOrder;
 }
