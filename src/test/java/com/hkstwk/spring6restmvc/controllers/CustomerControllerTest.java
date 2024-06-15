@@ -1,6 +1,7 @@
 package com.hkstwk.spring6restmvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hkstwk.spring6restmvc.config.SpringSecurityConfig;
 import com.hkstwk.spring6restmvc.model.CustomerDTO;
 import com.hkstwk.spring6restmvc.services.CustomerService;
 import com.hkstwk.spring6restmvc.services.CustomerServiceImpl;
@@ -11,7 +12,9 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
@@ -19,6 +22,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.hkstwk.spring6restmvc.controllers.BeerControllerTest.USER_NAME;
+import static com.hkstwk.spring6restmvc.controllers.BeerControllerTest.USER_PASSWORD;
 import static com.hkstwk.spring6restmvc.controllers.CustomerController.CUSTOMER_PATH;
 import static com.hkstwk.spring6restmvc.controllers.CustomerController.CUSTOMER_PATH_ID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,6 +32,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -38,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CustomerController.class)
+@Import(SpringSecurityConfig.class)
 class CustomerControllerTest {
 
     @Autowired
@@ -58,6 +65,8 @@ class CustomerControllerTest {
     ArgumentCaptor<UUID> uuidArgumentCaptor;
     @Autowired
     private CustomerController customerController;
+    @Autowired
+    private HttpSecurity httpSecurity;
 
     @BeforeEach
     void setUp() {
@@ -118,17 +127,17 @@ class CustomerControllerTest {
         CustomerDTO customer = customerServiceImpl.listCustomers().getFirst();
         UUID uuid = UUID.randomUUID();
 
-        given(customerService.updateById(any(),any())).willReturn(Optional.of(customer));
+        given(customerService.updateById(any(), any())).willReturn(Optional.of(customer));
 
         mockMvc.perform(put(CUSTOMER_PATH_ID, customer.getId())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(customer)))
+                        .with(httpBasic(USER_NAME, USER_PASSWORD))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isNoContent());
 
         verify(customerService).updateById(any(UUID.class), any(CustomerDTO.class));
         verify(customerService).updateById(eq(customer.getId()), any(CustomerDTO.class));
-        // verify(customerService).updateById(eq(uuid), any(Customer.class));
     }
 
     @Test
@@ -136,17 +145,19 @@ class CustomerControllerTest {
         given(customerService.listCustomers()).willReturn(customerServiceImpl.listCustomers());
 
         mockMvc.perform(get(CUSTOMER_PATH)
-                .accept(MediaType.APPLICATION_JSON))
+                        .with(httpBasic(USER_NAME, USER_PASSWORD))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()",is(3)));
+                .andExpect(jsonPath("$.length()", is(3)));
     }
 
     @Test
     void getCustomerByIdNotFound() throws Exception {
         given(customerService.getCustomerById(any(UUID.class))).willReturn(Optional.empty());
 
-        mockMvc.perform(get(CUSTOMER_PATH_ID, UUID.randomUUID()))
+        mockMvc.perform(get(CUSTOMER_PATH_ID, UUID.randomUUID())
+                        .with(httpBasic(USER_NAME, USER_PASSWORD)))
                 .andExpect(status().isNotFound());
     }
 
@@ -157,7 +168,8 @@ class CustomerControllerTest {
         given(customerService.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
 
         mockMvc.perform(get(CUSTOMER_PATH_ID, testCustomer.getId())
-                .accept(MediaType.APPLICATION_JSON))
+                        .with(httpBasic(USER_NAME, USER_PASSWORD))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.customerName", is(testCustomer.getCustomerName())));
