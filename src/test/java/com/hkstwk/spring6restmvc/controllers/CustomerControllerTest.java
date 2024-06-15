@@ -83,9 +83,10 @@ class CustomerControllerTest {
         given(customerService.patchCustomerById(any(), any())).willReturn(Optional.of(customer));
 
         mockMvc.perform(patch(CUSTOMER_PATH_ID, customer.getId())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(customerMap)))
+                        .with(httpBasic(USER_NAME, USER_PASSWORD))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerMap)))
                 .andExpect(status().isNoContent());
 
         verify(customerService).patchCustomerById(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
@@ -95,11 +96,12 @@ class CustomerControllerTest {
 
     @Test
     void deleteCustomer() throws Exception {
-        CustomerDTO customer= customerServiceImpl.listCustomers().getFirst();
+        CustomerDTO customer = customerServiceImpl.listCustomers().getFirst();
 
         given(customerService.deleteById(any())).willReturn(true);
 
-        mockMvc.perform(delete(CUSTOMER_PATH_ID, customer.getId()))
+        mockMvc.perform(delete(CUSTOMER_PATH_ID, customer.getId())
+                        .with(httpBasic(USER_NAME, USER_PASSWORD)))
                 .andExpect(status().isNoContent());
 
         verify(customerService).deleteById(uuidArgumentCaptor.capture());
@@ -115,6 +117,7 @@ class CustomerControllerTest {
         given(customerService.saveNewCustomer(any(CustomerDTO.class))).willReturn(customerServiceImpl.listCustomers().getLast());
 
         mockMvc.perform(post(CUSTOMER_PATH)
+                        .with(httpBasic(USER_NAME, USER_PASSWORD))
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
