@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -68,6 +69,19 @@ class BeerControllerIT {
     void testListBeers() {
         Page<BeerDTO> beerDTOPage = beerController.listBeers(null, null, 1, 2414);
         assertThat(beerDTOPage.getContent()).hasSize(1000);
+    }
+
+    @Test
+    void testListBeersInvalidAuthentication() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .with(httpBasic("NON", "EXISTING")))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void testListBeersNoAuthentication() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
