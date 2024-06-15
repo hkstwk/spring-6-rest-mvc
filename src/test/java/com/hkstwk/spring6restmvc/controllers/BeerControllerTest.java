@@ -1,6 +1,7 @@
 package com.hkstwk.spring6restmvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hkstwk.spring6restmvc.config.SpringSecurityConfig;
 import com.hkstwk.spring6restmvc.exceptions.NotFoundException;
 import com.hkstwk.spring6restmvc.model.BeerDTO;
 import com.hkstwk.spring6restmvc.services.BeerService;
@@ -12,8 +13,8 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.HttpBasicDsl;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -42,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BeerController.class)
+@Import(SpringSecurityConfig.class)
 class BeerControllerTest {
 
     @Autowired
