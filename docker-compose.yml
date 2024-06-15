@@ -1,0 +1,13 @@
+# Create dev environment with all required external services (to be used with dev profile)
+
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ech-communication-service
+      MYSQL_USER: restadmin
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"

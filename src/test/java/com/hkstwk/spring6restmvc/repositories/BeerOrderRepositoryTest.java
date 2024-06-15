@@ -2,6 +2,7 @@ package com.hkstwk.spring6restmvc.repositories;
 
 import com.hkstwk.spring6restmvc.entities.Beer;
 import com.hkstwk.spring6restmvc.entities.BeerOrder;
+import com.hkstwk.spring6restmvc.entities.BeerOrderShipment;
 import com.hkstwk.spring6restmvc.entities.Customer;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +38,8 @@ class BeerOrderRepositoryTest {
         BeerOrder beerOrder = BeerOrder.builder()
                 .customerRef("Test order")
                 .customer(testCustomer)
+                .beerOrderShipment(BeerOrderShipment.builder()
+                        .trackingNumber("12345").build())
                 .build();
 
         BeerOrder savedBeerOrder = beerOrderRepository.save(beerOrder);
