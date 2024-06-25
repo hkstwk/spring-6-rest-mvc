@@ -1,6 +1,5 @@
 package com.hkstwk.spring6restmvc.config;
 
-import com.hkstwk.spring6restmvc.entities.Customer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -12,10 +11,9 @@ public class SpringSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
-                .and().httpBasic(Customizer.withDefaults())
-                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.ignoringRequestMatchers("/api/**"));
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated()).
+                oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer -> httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()));
+
         return http.build();
     }
 }
