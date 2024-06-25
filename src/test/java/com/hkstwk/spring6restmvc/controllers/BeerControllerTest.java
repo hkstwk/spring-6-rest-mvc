@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -32,6 +33,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -84,7 +86,14 @@ class BeerControllerTest {
         given(beerService.patchById(any(), any())).willReturn(Optional.of(beer));
 
         mockMvc.perform(patch(BEER_PATH_ID, beer.getId())
-                        .with(httpBasic(USER_NAME, USER_PASSWORD))
+                        .with(jwt().jwt(jwt -> {
+                            jwt.claims(claims -> {
+                                        claims.put("scope", "message.read");
+                                        claims.put("scope", "message.write");
+                                    })
+                                    .subject("messaging-client")
+                                    .notBefore(Instant.now().minusSeconds(5L));
+                        }))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
