@@ -31,9 +31,9 @@ public class BeerControllerRestAssuredTest {
 
     OpenApiValidationFilter filter = new OpenApiValidationFilter(OpenApiInteractionValidator
             .createForSpecificationUrl("oa3.yml")
-//            .withWhitelist(ValidationErrorsWhitelist.create()
-//                    .withRule("Ignore date format",
-//                    messageHasKey("validation.response.body.schema.format.date-time")))
+            .withWhitelist(ValidationErrorsWhitelist.create()
+                    .withRule("Ignore date format",
+                    messageHasKey("validation.response.body.schema.format.date-time")))
             .build());
 
     @Configuration
