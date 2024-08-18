@@ -8,7 +8,7 @@
         <version>3.3.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>guru.springframework</groupId>
+    <groupId>nl.hkstwk</groupId>
     <artifactId>spring-6-rest-mvc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-6-rest-mvc</name>
@@ -165,7 +165,7 @@
                 <artifactId>springdoc-openapi-maven-plugin</artifactId>
                 <version>1.4</version>
                 <configuration>
-                    <apiDocsUrl>http://localhost:8081/v3/api-docs.yaml</apiDocsUrl>
+                    <apiDocsUrl>http://localhost:8082/v3/api-docs.yaml</apiDocsUrl>
                     <outputFileName>oa3.yml</outputFileName>
                 </configuration>
                 <executions>
