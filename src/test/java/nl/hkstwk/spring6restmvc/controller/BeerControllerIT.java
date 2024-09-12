@@ -9,6 +9,7 @@ import nl.hkstwk.spring6restmvc.events.BeerUpdatedEvent;
 import nl.hkstwk.spring6restmvc.mappers.BeerMapper;
 import nl.hkstwk.spring6restmvc.model.BeerDTO;
 import nl.hkstwk.spring6restmvc.model.BeerStyle;
+import nl.hkstwk.spring6restmvc.repositories.BeerOrderRepository;
 import nl.hkstwk.spring6restmvc.repositories.BeerRepository;
 import lombok.val;
 import org.hamcrest.core.IsNull;
@@ -56,6 +57,9 @@ class BeerControllerIT {
 
     @Autowired
     BeerRepository beerRepository;
+
+    @Autowired
+    BeerOrderRepository beerOrderRepository;
 
     @Autowired
     BeerMapper beerMapper;
@@ -139,9 +143,14 @@ class BeerControllerIT {
                 .count());
     }
 
+    @Transactional
     @Test
     void deleteByIdFoundMVC() throws Exception {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
+        beer.getBeerOrderLines()
+                .stream()
+                        .map(beerOrderLine -> beerOrderLine.getBeerOrder().getId())
+                                .forEach(beerOrderUUID -> beerOrderRepository.deleteById(beerOrderUUID));
 
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
                         .with(BeerControllerTest.jwtRequestPostProcessor)
@@ -376,6 +385,8 @@ class BeerControllerIT {
     @Test
     void testEmptyList() {
         beerRepository.deleteAll();
+        beerOrderRepository.deleteAll();
+
         Page<BeerDTO> dtos = beerController.listBeers(null, null, false, 1, 25);
 
         assertThat(dtos.getContent().size()).isEqualTo(0);
