@@ -1,6 +1,7 @@
 package nl.hkstwk.spring6restmvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.val;
 import nl.hkstwk.spring6restmvc.entities.Beer;
 import nl.hkstwk.spring6restmvc.events.BeerCreatedEvent;
 import nl.hkstwk.spring6restmvc.events.BeerDeletedEvent;
@@ -11,7 +12,6 @@ import nl.hkstwk.spring6restmvc.model.BeerDTO;
 import nl.hkstwk.spring6restmvc.model.BeerStyle;
 import nl.hkstwk.spring6restmvc.repositories.BeerOrderRepository;
 import nl.hkstwk.spring6restmvc.repositories.BeerRepository;
-import lombok.val;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -104,7 +108,7 @@ class BeerControllerIT {
 
     @Test
     void testUpdateBeer() throws Exception {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
 
         BeerDTO beerDTO = beerMapper.beerToBeerDto(beer);
 
@@ -125,7 +129,7 @@ class BeerControllerIT {
 
     @Test
     void testPatchBeerMvc() throws Exception {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
@@ -149,8 +153,8 @@ class BeerControllerIT {
         Beer beer = beerRepository.findAll().getFirst();
         beer.getBeerOrderLines()
                 .stream()
-                        .map(beerOrderLine -> beerOrderLine.getBeerOrder().getId())
-                                .forEach(beerOrderUUID -> beerOrderRepository.deleteById(beerOrderUUID));
+                .map(beerOrderLine -> beerOrderLine.getBeerOrder().getId())
+                .forEach(beerOrderUUID -> beerOrderRepository.deleteById(beerOrderUUID));
 
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
                         .with(BeerControllerTest.jwtRequestPostProcessor)
@@ -167,7 +171,7 @@ class BeerControllerIT {
     @Disabled // just for demo purposes
     @Test
     void testUpdateBeerBadVersion() throws Exception {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
 
         BeerDTO beerDTO = beerMapper.beerToBeerDto(beer);
 
@@ -277,7 +281,7 @@ class BeerControllerIT {
 
     @Test
     void testPatchBeerBadName() throws Exception {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
@@ -295,16 +299,14 @@ class BeerControllerIT {
 
     @Test
     void testDeleteByIDNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            beerController.deleteById(UUID.randomUUID());
-        });
+        assertThrows(NotFoundException.class, () -> beerController.deleteById(UUID.randomUUID()));
     }
 
     @Rollback
     @Transactional
     @Test
     void deleteByIdFound() {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
 
         ResponseEntity responseEntity = beerController.deleteById(beer.getId());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
@@ -314,23 +316,21 @@ class BeerControllerIT {
 
     @Test
     void testUpdateNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build());
-        });
+        assertThrows(NotFoundException.class, () -> beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build()));
     }
 
     @Rollback
     @Transactional
     @Test
     void updateExistingBeer() {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
         BeerDTO beerDTO = beerMapper.beerToBeerDto(beer);
         beerDTO.setId(null);
         beerDTO.setVersion(null);
         final String beerName = "UPDATED";
         beerDTO.setBeerName(beerName);
 
-        ResponseEntity responseEntity = beerController.updateById(beer.getId(), beerDTO);
+        ResponseEntity<Void> responseEntity = beerController.updateById(beer.getId(), beerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
         Beer updatedBeer = beerRepository.findById(beer.getId()).get();
@@ -345,7 +345,7 @@ class BeerControllerIT {
                 .beerName("New Beer")
                 .build();
 
-        ResponseEntity responseEntity = beerController.handlePost(beerDTO);
+        ResponseEntity<Void> responseEntity = beerController.handlePost(beerDTO);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(201));
         assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
@@ -359,14 +359,12 @@ class BeerControllerIT {
 
     @Test
     void testBeerIdNotFound() {
-        assertThrows(NotFoundException.class, () -> {
-            beerController.getBeerById(UUID.randomUUID());
-        });
+        assertThrows(NotFoundException.class, () -> beerController.getBeerById(UUID.randomUUID()));
     }
 
     @Test
     void testGetById() {
-        Beer beer = beerRepository.findAll().get(0);
+        Beer beer = beerRepository.findAll().getFirst();
 
         BeerDTO dto = beerController.getBeerById(beer.getId());
 

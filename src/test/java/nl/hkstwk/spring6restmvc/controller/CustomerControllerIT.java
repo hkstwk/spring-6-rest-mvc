@@ -3,6 +3,7 @@ package nl.hkstwk.spring6restmvc.controller;
 import nl.hkstwk.spring6restmvc.entities.Customer;
 import nl.hkstwk.spring6restmvc.mappers.CustomerMapper;
 import nl.hkstwk.spring6restmvc.model.CustomerDTO;
+import nl.hkstwk.spring6restmvc.repositories.BeerOrderRepository;
 import nl.hkstwk.spring6restmvc.repositories.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ class CustomerControllerIT {
     CustomerRepository customerRepository;
 
     @Autowired
+    BeerOrderRepository beerOrderRepository;
+
+    @Autowired
     CustomerController customerController;
 
     @Autowired
@@ -34,9 +38,9 @@ class CustomerControllerIT {
     @Transactional
     @Test
     void deleteByIdFound() {
-        Customer customer = customerRepository.findAll().get(0);
+        Customer customer = customerRepository.findAll().getFirst();
 
-        ResponseEntity responseEntity = customerController.deleteCustomerById(customer.getId());
+        ResponseEntity<Void> responseEntity = customerController.deleteCustomerById(customer.getId());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
         assertThat(customerRepository.findById(customer.getId()).isEmpty());
@@ -98,6 +102,7 @@ class CustomerControllerIT {
     @Transactional
     @Test
     void testListAllEmptyList() {
+        beerOrderRepository.deleteAll();
         customerRepository.deleteAll();
         List<CustomerDTO> dtos = customerController.listAllCustomers();
 

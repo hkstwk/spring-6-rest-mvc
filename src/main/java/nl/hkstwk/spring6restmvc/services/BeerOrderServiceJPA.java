@@ -1,5 +1,7 @@
 package nl.hkstwk.spring6restmvc.services;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 import nl.hkstwk.spring6restmvc.controller.NotFoundException;
 import nl.hkstwk.spring6restmvc.entities.BeerOrder;
 import nl.hkstwk.spring6restmvc.entities.BeerOrderLine;
@@ -12,8 +14,6 @@ import nl.hkstwk.spring6restmvc.model.BeerOrderUpdateDTO;
 import nl.hkstwk.spring6restmvc.repositories.BeerOrderRepository;
 import nl.hkstwk.spring6restmvc.repositories.BeerRepository;
 import nl.hkstwk.spring6restmvc.repositories.CustomerRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -87,12 +87,10 @@ public class BeerOrderServiceJPA implements BeerOrderService {
 
         Set<BeerOrderLine> beerOrderLines = new HashSet<>();
 
-        beerOrderCreateDTO.getBeerOrderLines().forEach(beerOrderLine -> {
-            beerOrderLines.add(BeerOrderLine.builder()
-                    .beer(beerRepository.findById(beerOrderLine.getBeerId()).orElseThrow(NotFoundException::new))
-                    .orderQuantity(beerOrderLine.getOrderQuantity())
-                    .build());
-        });
+        beerOrderCreateDTO.getBeerOrderLines().forEach(beerOrderLine -> beerOrderLines.add(BeerOrderLine.builder()
+                .beer(beerRepository.findById(beerOrderLine.getBeerId()).orElseThrow(NotFoundException::new))
+                .orderQuantity(beerOrderLine.getOrderQuantity())
+                .build()));
 
         return beerOrderRepository.save(BeerOrder.builder()
                 .customer(customer)
