@@ -1,7 +1,7 @@
 package nl.hkstwk.spring6restmvc.services;
 
-import nl.hkstwk.spring6restmvc.model.BeerDTO;
-import nl.hkstwk.spring6restmvc.model.BeerStyle;
+import nl.hkstwk.spring6restmvcapi.model.BeerDTO;
+import nl.hkstwk.spring6restmvcapi.model.BeerStyle;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;

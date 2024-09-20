@@ -1,12 +1,12 @@
 package nl.hkstwk.spring6restmvc.entities;
 
-import nl.hkstwk.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import nl.hkstwk.spring6restmvcapi.model.BeerStyle;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
 

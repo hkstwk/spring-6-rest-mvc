@@ -1,11 +1,11 @@
 package nl.hkstwk.spring6restmvc.controller;
 
 import nl.hkstwk.spring6restmvc.entities.BeerOrder;
-import nl.hkstwk.spring6restmvc.model.BeerOrderCreateDTO;
-import nl.hkstwk.spring6restmvc.model.BeerOrderDTO;
-import nl.hkstwk.spring6restmvc.model.BeerOrderUpdateDTO;
 import nl.hkstwk.spring6restmvc.services.BeerOrderService;
 import lombok.RequiredArgsConstructor;
+import nl.hkstwk.spring6restmvcapi.model.BeerOrderCreateDTO;
+import nl.hkstwk.spring6restmvcapi.model.BeerOrderDTO;
+import nl.hkstwk.spring6restmvcapi.model.BeerOrderUpdateDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

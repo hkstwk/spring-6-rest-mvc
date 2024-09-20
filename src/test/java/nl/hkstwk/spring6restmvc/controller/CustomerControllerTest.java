@@ -2,9 +2,9 @@ package nl.hkstwk.spring6restmvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.hkstwk.spring6restmvc.config.SpringSecConfig;
-import nl.hkstwk.spring6restmvc.model.CustomerDTO;
 import nl.hkstwk.spring6restmvc.services.CustomerService;
 import nl.hkstwk.spring6restmvc.services.CustomerServiceImpl;
+import nl.hkstwk.spring6restmvcapi.model.CustomerDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

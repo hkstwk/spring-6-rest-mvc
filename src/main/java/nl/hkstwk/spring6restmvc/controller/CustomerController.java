@@ -1,8 +1,8 @@
 package nl.hkstwk.spring6restmvc.controller;
 
-import nl.hkstwk.spring6restmvc.model.CustomerDTO;
 import nl.hkstwk.spring6restmvc.services.CustomerService;
 import lombok.RequiredArgsConstructor;
+import nl.hkstwk.spring6restmvcapi.model.CustomerDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

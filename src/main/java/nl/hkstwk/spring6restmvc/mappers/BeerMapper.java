@@ -2,7 +2,7 @@ package nl.hkstwk.spring6restmvc.mappers;
 
 import nl.hkstwk.spring6restmvc.entities.Beer;
 import nl.hkstwk.spring6restmvc.entities.BeerAudit;
-import nl.hkstwk.spring6restmvc.model.BeerDTO;
+import nl.hkstwk.spring6restmvcapi.model.BeerDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

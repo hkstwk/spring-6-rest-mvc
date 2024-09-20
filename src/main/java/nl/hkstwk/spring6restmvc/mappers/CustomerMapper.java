@@ -1,7 +1,7 @@
 package nl.hkstwk.spring6restmvc.mappers;
 
 import nl.hkstwk.spring6restmvc.entities.Customer;
-import nl.hkstwk.spring6restmvc.model.CustomerDTO;
+import nl.hkstwk.spring6restmvcapi.model.CustomerDTO;
 import org.mapstruct.Mapper;
 
 /**

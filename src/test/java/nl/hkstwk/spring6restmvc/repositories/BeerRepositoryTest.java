@@ -2,9 +2,9 @@ package nl.hkstwk.spring6restmvc.repositories;
 
 import nl.hkstwk.spring6restmvc.bootstrap.BootstrapData;
 import nl.hkstwk.spring6restmvc.entities.Beer;
-import nl.hkstwk.spring6restmvc.model.BeerStyle;
 import nl.hkstwk.spring6restmvc.services.BeerCsvServiceImpl;
 import jakarta.validation.ConstraintViolationException;
+import nl.hkstwk.spring6restmvcapi.model.BeerStyle;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

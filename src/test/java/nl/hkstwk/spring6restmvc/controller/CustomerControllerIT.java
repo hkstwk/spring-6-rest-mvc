@@ -2,9 +2,9 @@ package nl.hkstwk.spring6restmvc.controller;
 
 import nl.hkstwk.spring6restmvc.entities.Customer;
 import nl.hkstwk.spring6restmvc.mappers.CustomerMapper;
-import nl.hkstwk.spring6restmvc.model.CustomerDTO;
 import nl.hkstwk.spring6restmvc.repositories.BeerOrderRepository;
 import nl.hkstwk.spring6restmvc.repositories.CustomerRepository;
+import nl.hkstwk.spring6restmvcapi.model.CustomerDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

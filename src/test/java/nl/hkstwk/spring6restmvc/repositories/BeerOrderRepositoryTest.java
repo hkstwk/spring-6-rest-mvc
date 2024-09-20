@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @SpringBootTest
 class BeerOrderRepositoryTest {
 
@@ -35,6 +37,7 @@ class BeerOrderRepositoryTest {
     @Test
     void testBeerOrders() {
         BeerOrder beerOrder = BeerOrder.builder()
+                .paymentAmount(BigDecimal.valueOf(12345678901234567.45))
                 .customerRef("Test order")
                 .customer(testCustomer)
                 .beerOrderShipment(BeerOrderShipment.builder()
@@ -44,8 +47,8 @@ class BeerOrderRepositoryTest {
 
         BeerOrder savedBeerOrder = beerOrderRepository.save(beerOrder);
 
-
         System.out.println(savedBeerOrder.getCustomerRef());
+        System.out.println(savedBeerOrder.getPaymentAmount());
     }
 }
 

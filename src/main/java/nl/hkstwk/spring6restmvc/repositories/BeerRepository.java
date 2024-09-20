@@ -1,7 +1,7 @@
 package nl.hkstwk.spring6restmvc.repositories;
 
 import nl.hkstwk.spring6restmvc.entities.Beer;
-import nl.hkstwk.spring6restmvc.model.BeerStyle;
+import nl.hkstwk.spring6restmvcapi.model.BeerStyle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

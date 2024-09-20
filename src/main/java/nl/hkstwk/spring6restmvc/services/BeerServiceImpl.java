@@ -1,8 +1,8 @@
 package nl.hkstwk.spring6restmvc.services;
 
-import nl.hkstwk.spring6restmvc.model.BeerDTO;
-import nl.hkstwk.spring6restmvc.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
+import nl.hkstwk.spring6restmvcapi.model.BeerDTO;
+import nl.hkstwk.spring6restmvcapi.model.BeerStyle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;

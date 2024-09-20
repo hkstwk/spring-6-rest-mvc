@@ -1,6 +1,6 @@
 package nl.hkstwk.spring6restmvc.services;
 
-import nl.hkstwk.spring6restmvc.model.CustomerDTO;
+import nl.hkstwk.spring6restmvcapi.model.CustomerDTO;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,10 +1,10 @@
 package nl.hkstwk.spring6restmvc.services;
 
 import nl.hkstwk.spring6restmvc.mappers.CustomerMapper;
-import nl.hkstwk.spring6restmvc.model.CustomerDTO;
 import nl.hkstwk.spring6restmvc.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.hkstwk.spring6restmvcapi.model.CustomerDTO;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;

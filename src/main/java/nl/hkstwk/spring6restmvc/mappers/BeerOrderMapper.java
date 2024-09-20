@@ -3,9 +3,9 @@ package nl.hkstwk.spring6restmvc.mappers;
 import nl.hkstwk.spring6restmvc.entities.BeerOrder;
 import nl.hkstwk.spring6restmvc.entities.BeerOrderLine;
 import nl.hkstwk.spring6restmvc.entities.BeerOrderShipment;
-import nl.hkstwk.spring6restmvc.model.BeerOrderDTO;
-import nl.hkstwk.spring6restmvc.model.BeerOrderLineDTO;
-import nl.hkstwk.spring6restmvc.model.BeerOrderShipmentDTO;
+import nl.hkstwk.spring6restmvcapi.model.BeerOrderDTO;
+import nl.hkstwk.spring6restmvcapi.model.BeerOrderLineDTO;
+import nl.hkstwk.spring6restmvcapi.model.BeerOrderShipmentDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
